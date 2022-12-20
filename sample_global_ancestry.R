@@ -4,9 +4,6 @@ library(tidyr)
 
 # Define/initialize necessary simulation components
 sample_aa_ancestry <- sample(1:9, 320, replace = TRUE)
-alleles <- list("C", "A")
-risk_allele <- "C"
-other_allele <- "A"
 haplotype_1 <- list()
 haplotype_2 <- list()
 risk_allele_freqs <- sample(1:9, 320, replace = TRUE) / 10
@@ -15,8 +12,7 @@ all_indiv <- list() # To be a list of dfs for each individual
 # Generate random alleles for N=100 individuals
 for (i in 1:100) {
   individual <- data.frame()
-  haplotype_1 <- list()
-  haplotype_2 <- list()
+  snps_genotype <- list()
   
   # Generate snps
   for (j in 1:length(risk_allele_freqs)) {
@@ -33,6 +29,18 @@ for (i in 1:100) {
         chromosomes[chromosome] <- "e"
       }
     }
+    # 2 <- risk genotype
+    # 1 <- heterozygous
+    # 0 <- wild type
+    genotypeCount <- 0
+    for (k in 1:2) {
+      alleleChance <- runif(1, min=0, max=10)
+      if (alleleChance <= risk_allele_freqs[j]) {
+        genotypeCount = genotypeCount + 1
+      }
+    }
+    # Append genotype to simulated individual 
+    snps_genotype[j] <- genotypeCount
   }
 }
 
