@@ -67,4 +67,7 @@ for (i in 1:100) {
   individual$snps <- snps_genotype
   # TODO calculate grs. Need dosage data
   # TODO add grs scores to df
+  
+  # Append invididual's data to population list
+  all_indiv[[i]] <- individual
 }
