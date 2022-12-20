@@ -4,8 +4,6 @@ library(tidyr)
 
 # Define/initialize necessary simulation components
 sample_aa_ancestry <- sample(1:9, 320, replace = TRUE)
-haplotype_1 <- list()
-haplotype_2 <- list()
 ea_risk_allele_freqs <- sample(1:9, 320, replace = TRUE)
 aa_risk_allele_freqs <- sample(1:9, 320, replace = TRUE)
 all_indiv <- list() # To be a list of dfs for each individual
