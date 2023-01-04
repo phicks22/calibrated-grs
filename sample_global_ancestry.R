@@ -3,9 +3,10 @@ library(tidyr)
 
 
 # Define/initialize necessary simulation components
-sample_aa_ancestry <- sample(1:9, 320, replace = TRUE)
-ea_risk_allele_freqs <- sample(1:9, 320, replace = TRUE)
-aa_risk_allele_freqs <- sample(1:9, 320, replace = TRUE)
+num_alleles <- 320
+sample_aa_ancestry <- sample(1:9, num_alleles, replace = TRUE)
+ea_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
+aa_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
 all_indiv <- list() # To be a list of dfs for each individual
 
 
@@ -13,13 +14,13 @@ generate_genotype <- function(chr_ancestry, aa_risk, ea_risk) {
   genotypeCount <- 0
   for (k in 1:2) {
     
-    if (chr_ancestry[k] == "a") {
+    if (chr_ancestry[k] == 0) {
       alleleChance <- runif(1, min=0, max=10)
       if (alleleChance <= aa_risk) {
         genotypeCount = genotypeCount + 1
       }
     }
-    else {
+    else if (chr_ancestry[k] == 1) {
       alleleChance <- runif(1, min=0, max=10)
       if (alleleChance <= ea_risk) {
         genotypeCount = genotypeCount + 1
@@ -32,22 +33,22 @@ generate_genotype <- function(chr_ancestry, aa_risk, ea_risk) {
 
 # Generate random alleles for N=100 individuals
 for (i in 1:100) {
-  individual <- data.frame()
-  snps_genotype <- list()
+  individual <- data.frame(allele_num = 1:num_alleles)
+  snps_genotype <- vector()
   
   # Generate snps
-  for (j in 1:length(risk_allele_freqs)) {
+  for (allele in 1:num_alleles) {
     # initialize chromosome vector
     chromosomes <- vector()
     
     # Draw chromosomes based on global ancestry proportions
     for (chromosome in 1:2) {
       chr_draw <- runif(1, min=0, max=10)
-      if (chr_draw <= sample_aa_ancestry[j]) {
-        chromosomes[chromosome] <- "a"
+      if (chr_draw <= sample_aa_ancestry[allele]) {
+        chromosomes[chromosome] <- 0
       }
       else {
-        chromosomes[chromosome] <- "e"
+        chromosomes[chromosome] <- 1
       }
     }
     
@@ -55,14 +56,14 @@ for (i in 1:100) {
     # 1 <- heterozygous
     # 0 <- wild type
     genotypeCount <- generate_genotype(chr_ancestry = chromosomes, 
-                                      aa_risk = aa_risk_allele_freqs[j], 
-                                       ea_risk = aa_risk_allele_freqs[j])
+                                      aa_risk = aa_risk_allele_freqs[allele], 
+                                       ea_risk = aa_risk_allele_freqs[allele])
     
     # Append genotype to simulated individual 
-    snps_genotype[j] <- genotypeCount
+    snps_genotype <- append(snps_genotype, genotypeCount)
   }
   # Add genotype scores to df
-  individual$snps <- snps_genotype
+  individual['snps'] <- snps_genotype
   # TODO calculate grs. Need dosage data
   # TODO add grs scores to df
   
