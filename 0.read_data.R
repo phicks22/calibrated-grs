@@ -14,5 +14,5 @@ opt = parse_args(opt_parser)
 grs_file <- opt[[1]]
 variables_file <- opt[[2]]
 
-grs_scores <- read.table(grs_file, sep=",")
+grs_scoresFull <- read.table(grs_file, sep=",")
 variables <- read.table(variables_file, sep=",")
