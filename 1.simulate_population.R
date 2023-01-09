@@ -1,3 +1,5 @@
+# 0.read_data.R must be run first to create the necessary data frames
+
 library(dplyr)
 library(tidyr)
 
