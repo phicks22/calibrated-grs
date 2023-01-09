@@ -11,6 +11,10 @@ ea_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
 aa_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
 all_indiv <- list() # To be a list of dfs for each individual
 
+# Subset data from 0.read_data.R
+aa_ancestry <- variables$AFR_ances_prop  # African ancestry proportion
+grs_scores <- select(as.tibble(grs_scoresFull), -c(1:6))  # Only GRS scores
+
 
 generate_genotype <- function(chr_ancestry, aa_risk, ea_risk) {
   genotypeCount <- 0
