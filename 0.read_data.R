@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 library("optparse")
+library(dplyr)
 
 option_list = list(
   make_option(c("-g", "--grs_file"), type="character", default=NULL, 
@@ -22,7 +23,7 @@ variables_file <- opt[[2]]
 aa_pop_file <- opt[[3]]
 ea_pop_file <- opt[[4]]
 
-grs_scoresFull <- read.table(grs_file, sep=",")
-variables <- read.table(variables_file, sep=",")
-aa_pop <- read.table(aa_pop_file, sep=",")
-ea_pop <- read.table(ea_pop_file, sep=",")
+grs_scoresFull <- read.table(grs_file, header = TRUE , sep=",")
+variables <- read.table(variables_file, header = TRUE , sep=",")
+aa_pop <- read.table(aa_pop_file, header = TRUE , sep=",")
+ea_pop <- read.table(ea_pop_file, header = TRUE , sep=",")
