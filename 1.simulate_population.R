@@ -5,29 +5,30 @@ library(tidyr)
 
 
 # Define/initialize necessary simulation components
-num_alleles <- 320
-sample_aa_ancestry <- sample(1:9, num_alleles, replace = TRUE)
-ea_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
-aa_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
+# sample_aa_ancestry <- sample(1:9, num_alleles, replace = TRUE)
+# ea_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
+# aa_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
 all_indiv <- list() # To be a list of dfs for each individual
 
 # Subset data from 0.read_data.R
 aa_ancestry <- variables$AFR_ances_prop  # African ancestry proportion
 grs_scores <- select(as.tibble(grs_scoresFull), -c(1:6))  # Only GRS scores
+num_alleles <- nrow(grs_scores)
 
 
-generate_genotype <- function(chr_ancestry, aa_risk, ea_risk) {
+generate_genotype <- function(chr_ancestry, allele) {
   genotypeCount <- 0
-  for (k in 1:2) {
-    
-    if (chr_ancestry[k] == 0) {
+  for (ancestry_origin in chr_ancestry) {
+    aa_risk <- aa_pop$risk_allele_freq[allele]
+    if (chr_ancestry[ancestry_origin] == 0) {
       alleleChance <- runif(1, min=0, max=10)
       if (alleleChance <= aa_risk) {
         genotypeCount = genotypeCount + 1
       }
     }
-    else if (chr_ancestry[k] == 1) {
+    else if (chr_ancestry[ancestry_origin] == 1) {
       alleleChance <- runif(1, min=0, max=10)
+      ea_risk <- ea_pop$risk_allele_freq[allele]
       if (alleleChance <= ea_risk) {
         genotypeCount = genotypeCount + 1
       }
@@ -61,9 +62,8 @@ for (i in 1:100) {
     # 2 <- risk genotype
     # 1 <- heterozygous
     # 0 <- wild type
-    genotypeCount <- generate_genotype(chr_ancestry = chromosomes, 
-                                      aa_risk = aa_risk_allele_freqs[allele], 
-                                       ea_risk = aa_risk_allele_freqs[allele])
+    genotypeCount <- generate_genotype(chr_ancestry = chromosomes,
+                                       allele = allele)
     
     # Append genotype to simulated individual 
     snps_genotype <- append(snps_genotype, genotypeCount)
