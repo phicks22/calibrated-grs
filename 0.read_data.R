@@ -1,27 +1,22 @@
 #!/usr/bin/env Rscript
-library("optparse")
 library(dplyr)
 
-option_list = list(
-  make_option(c("-g", "--grs_file"), type="character", default=NULL, 
-              help="grs scores dataset file name", metavar="character"),
-  make_option(c("-v", "--variables"), type="character", default=NULL, 
-              help="alternative variables dataset file name", metavar="character"),
-  make_option(c("-a", "--african_pop"), type="character", default=NULL, 
-              help="allele frequencies from African populations to simulate 
-              'fake' population", metavar="character"),
-  make_option(c("-e", "--european_pop"), type="character", default=NULL, 
-              help="allele frequencies from European populations to simulate 
-              'fake' population", metavar="character")
-)
+args = commandArgs(trailingOnly=TRUE)
 
-opt_parser = OptionParser(option_list=option_list)
-opt = parse_args(opt_parser)
+# Ensure all arguments are included in command line
+if (length(args)==0) {
+  stop("The following arguments are required: \n 
+       1. grs scores dataset file name \n
+       2. alternative variables dataset file name \n
+       3. allele frequencies from African populations \n
+       4. allele frequencies from European populations", 
+       call.=FALSE)
+}
 
-grs_file <- opt[[1]]
-variables_file <- opt[[2]]
-aa_pop_file <- opt[[3]]
-ea_pop_file <- opt[[4]]
+grs_file <- args[1]
+variables_file <- args[2]
+aa_pop_file <- args[3]
+ea_pop_file <- args[4]
 
 grs_scoresFull <- read.table(grs_file, header = TRUE , sep=",")
 variables <- read.table(variables_file, header = TRUE , sep=",")
