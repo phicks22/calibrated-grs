@@ -6,10 +6,11 @@ Genetic risk scores (GRSs) are used today in precision medicine to assess an ind
 
 Here, we present a method to calibrate GRSs for groups of African American (AA) ancestry by generating a separate GRS distribution for each individual based on estimated global ancestries
 
-## Read in your GRS and variables data
 
-First, we must read in the data. Run the following command in your terminal to read the GRS and variables `.txt` files.
+## Simulate the population
+
+We need to read in the data and simulate a population representative of an individual of African Ancestry. The ``1.simulate_population.R` script will generate a simulated population for each individual in the target data set using the ancestry and target data saved from `0.read_data.R`.
 
 ``` bash
-Rscript 0.read_data.R -g <GRS_file.txt> -v <variables_file.txts>
+Rscript 1.simulate_population.R -g <GRS_file.txt> -v <variables_file.txts> -a <1KGenomes_AFR_file.txt> -e <G1KGenomes_EURO_file.txt>
 ```
