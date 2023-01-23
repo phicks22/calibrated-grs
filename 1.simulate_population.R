@@ -1,20 +1,15 @@
-# 0.read_data.R must be run first to create the necessary data frames
-
 library(dplyr)
 library(tidyr)
 
 
-# Define/initialize necessary simulation components
-# sample_aa_ancestry <- sample(1:9, num_alleles, replace = TRUE)
-# ea_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
-# aa_risk_allele_freqs <- sample(1:9, num_alleles, replace = TRUE)
-all_indiv <- list() # To be a list of dfs for each individual
+# Read data
+source("0.read_data.R")
 
 # Subset data from 0.read_data.R
 aa_ancestry <- variables$AFR_ances_prop  # African ancestry proportion
 grs_scores <- select(as.tibble(grs_scoresFull), -c(1:6))  # Only GRS scores
 num_alleles <- nrow(grs_scores)
-
+all_indiv <- list() # To be a list of dfs for each individual
 
 generate_genotype <- function(chr_ancestry, allele) {
   genotypeCount <- 0
