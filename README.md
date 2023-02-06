@@ -9,8 +9,8 @@ Here, we present a method to calibrate GRSs for groups of African American (AA) 
 
 ## Simulate the population
 
-We need to read in the data and simulate a population representative of an individual of African Ancestry. The ``1.simulate_population.R` script will generate a simulated population for each individual in the target data set using the ancestry and target data saved from `0.read_data.R`.
+We need to read in the data and simulate a population representative of an individual of African Ancestry. The ``0.simulate_population.R` script will generate a simulated population for each individual in the target data set.
 
 ``` bash
-Rscript 1.simulate_population.R <GRS_file.txt> <variables_file.txts> <1KGenomes_AFR_file.txt> <G1KGenomes_EURO_file.txt>
+Rscript 0.simulate_population.R <GRS_file.txt> <snpWeights_and_locations.txt> <1KGenomes_AFR_file.txt> <G1KGenomes_EURO_file.txt>
 ```
