@@ -68,11 +68,3 @@ end_df <- data.frame("grs.std.wt" = grs.std.wt, "grs.wt" = grs.wt, "IID" = IID)
 print(end_df)
 write.table(end_df, file = "data/grs_init.txt",
             sep = ",")
-
-
-
-
-
-
-
-
