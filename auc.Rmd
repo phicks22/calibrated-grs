@@ -7,7 +7,7 @@ output: html_document
 
 # Setup
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(root.dir = '/calibrated-grs', echo = TRUE)
 ```
 
 ## Load libraries
@@ -19,10 +19,10 @@ library(pROC)
 
 # Load data
 ```{r data}
-AFR_grs_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/grs_AA_init.txt"
-EUR_grs_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/grs_EA_init.txt"
-AFR_variables_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/AA_Diabetes_Variables_REGARDS.txt"
-EUR_variables_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/EA_Diabetes_Variables_REGARDS.txt"
+AFR_grs_file <- "data/grs_AA_init.txt"
+EUR_grs_file <- "data/grs_EA_init.txt"
+AFR_variables_file <- "data/AA_Diabetes_Variables_REGARDS.txt"
+EUR_variables_file <- "data/EA_Diabetes_Variables_REGARDS.txt"
 
 # PRS scores
 AFR_grs_scores <- read.table(AFR_grs_file, sep = ",", header = TRUE)
