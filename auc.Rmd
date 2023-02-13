@@ -53,7 +53,7 @@ EUR_grs_scores$Population <- as.factor("EUR")
 # Bind scores for both populations
 binded_scores <- rbind(AFR_grs_scores, EUR_grs_scores)
 scores_diagnosis <- merge(binded_scores, binded_diagnosis)
-scores_diagnosis <- scores_diagnosis[-30, ]
+scores_diagnosis <- scores_diagnosis[-30, ]  # Remove single missing row
 scores_diagnosis
 
 aa_roc_data <- subset(scores_diagnosis, Population == "AFR")
@@ -65,8 +65,6 @@ aa_roc_data
 ```{r roc}
 # Africans
 aa_roc_data <- subset(scores_diagnosis, Population == "AFR")
-# aa_diabetes_roc <- roc(controls=aa_roc_data$grs.wt[aa_roc_data$Diabetes=="N"],
-#                         aa_roc_data$grs.wt[aa_roc_data$Diabetes=="Y"])
 aa_diabetes_roc <- roc(Diabetes ~ grs.wt, aa_roc_data)
 
 # Europeans
