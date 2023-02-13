@@ -1,0 +1,87 @@
+---
+title: "AUC"
+author: "Parker Hicks"
+date: "2023-02-07"
+output: html_document
+---
+
+# Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries
+```{r libraries}
+library(dplyr)
+library(tidyr)
+library(pROC)
+```
+
+# Load data
+```{r data}
+AFR_grs_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/grs_AA_init.txt"
+EUR_grs_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/grs_EA_init.txt"
+AFR_variables_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/AA_Diabetes_Variables_REGARDS.txt"
+EUR_variables_file <- "/Users/parkerhicks/Desktop/Code/calibrated-grs/data/EA_Diabetes_Variables_REGARDS.txt"
+
+# PRS scores
+AFR_grs_scores <- read.table(AFR_grs_file, sep = ",", header = TRUE)
+EUR_grs_scores <- read.table(EUR_grs_file, sep = ",", header = TRUE)
+
+# Remove african ancestry proportion
+AFR_grs_scores <- select(AFR_grs_scores, -c("AFR_ances_prop"))
+
+# Diabetes variables
+AFR_variables <- read.table(AFR_variables_file, sep = ",", header = TRUE)
+EUR_variables <- read.table(EUR_variables_file, sep = ",", header = TRUE)
+
+# Subset variables
+AFR_diagnosis <- select(AFR_variables, c("IID", "Diabetes"))
+EUR_diagnosis <- select(EUR_variables, c("IID", "Diabetes"))
+
+binded_diagnosis <- rbind(AFR_diagnosis, EUR_diagnosis)
+binded_diagnosis$Diabetes <- as.factor(binded_diagnosis$Diabetes)
+binded_diagnosis$Diabetes<-ifelse(binded_diagnosis$Diabetes=="Y",1,0)
+```
+
+# Manipulate data
+```{r manipulate}
+# Set population values
+AFR_grs_scores$Population <- as.factor("AFR")
+EUR_grs_scores$Population <- as.factor("EUR")
+
+# Bind scores for both populations
+binded_scores <- rbind(AFR_grs_scores, EUR_grs_scores)
+scores_diagnosis <- merge(binded_scores, binded_diagnosis)
+scores_diagnosis <- scores_diagnosis[-30, ]
+scores_diagnosis
+
+aa_roc_data <- subset(scores_diagnosis, Population == "AFR")
+aa_roc_data
+```
+
+# Create roc objects
+## Case - control is diabetes y/n from variables dataset 
+```{r roc}
+# Africans
+aa_roc_data <- subset(scores_diagnosis, Population == "AFR")
+# aa_diabetes_roc <- roc(controls=aa_roc_data$grs.wt[aa_roc_data$Diabetes=="N"],
+#                         aa_roc_data$grs.wt[aa_roc_data$Diabetes=="Y"])
+aa_diabetes_roc <- roc(Diabetes ~ grs.wt, aa_roc_data)
+
+# Europeans
+ea_roc_data <- subset(scores_diagnosis, Population == "EUR")
+ea_diabetes_roc <- roc(Diabetes ~ grs.wt, ea_roc_data)
+```
+
+# Calculate auc
+```{r auc}
+aa_auc <- auc(aa_diabetes_roc)
+cat("African ancestry AUC: ", aa_auc, "\n")
+
+ea_auc <- auc(ea_diabetes_roc)
+cat("European ancestry AUC: ", ea_auc)
+```
+
+
+
